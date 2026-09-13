@@ -74,6 +74,7 @@ class TestCase(systest.TestCase):
         video_codec: FfmpegVideoCodec = FfmpegVideoCodec.HEVC,
         channels: int = 1,
         audio_bitrate: int = 128000,
+        audio_bitrate_tolerance: int = 13000,
         check_video_presentation_time_stamps: bool = True,
         check_number_of_samples: bool = True,
         check_picture_types: bool = True,
@@ -99,6 +100,7 @@ class TestCase(systest.TestCase):
             recording,
             channels,
             audio_bitrate,
+            audio_bitrate_tolerance,
             check_number_of_samples,
             check_audio_presentation_time_stamps,
         )
@@ -222,6 +224,7 @@ class TestCase(systest.TestCase):
         recording: Path,
         channels: int,
         bitrate: int,
+        bitrate_tolerance: int,
         check_number_of_samples: bool,
         check_presentation_time_stamps: bool,
     ) -> None:
@@ -231,8 +234,8 @@ class TestCase(systest.TestCase):
         self.assert_equal(audio.sample_rate, 48000)
         self.assert_equal(audio.channels, channels)
         self.assert_equal(audio.channel_layout, CHANNEL_LAYOUTS[channels])
-        self.assert_greater(audio.bit_rate, bitrate - 13000)
-        self.assert_less(audio.bit_rate, bitrate + 13000)
+        self.assert_greater(audio.bit_rate, bitrate - bitrate_tolerance)
+        self.assert_less(audio.bit_rate, bitrate + bitrate_tolerance)
         if check_presentation_time_stamps:
             self._assert_audio_presentation_time_stamps(recording, audio)
         if probe.audio_time_codes is not None:
