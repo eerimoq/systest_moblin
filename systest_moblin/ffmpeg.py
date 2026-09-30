@@ -723,7 +723,7 @@ def read_qr_codes(path: Path, crop: Crop) -> list[QrCode]:
         "-i",
         str(path),
         "-vf",
-        f"crop=x={crop.x}:y={crop.y}:w={crop.width}:h={crop.height}",
+        f"crop=x={crop.x}:y={crop.y}:w={crop.width}:h={crop.height},pad=iw+80:ih+80:40:40:white",
         f"{qr_codes_dir}/%05d.jpg",
     )
     with ThreadPoolExecutor(max_workers=32) as executor:
